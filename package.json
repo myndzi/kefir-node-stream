@@ -1,6 +1,6 @@
 {
   "name": "kefir-node-stream",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Return a properly lazy Kefir stream given a Node streams2 stream",
   "main": "index.js",
   "scripts": {
