@@ -203,19 +203,40 @@ describe('fromNodeStream', function () {
         var pt = new stream.PassThrough({ objectMode: true }),
             obs = fromNodeStream(pt);
         
-        var first = obs.take(1);
-        
         var expect = ['f', 'o', 'o'];
-        first.onValue(function (chunk) {
+        var count = 0;
+        obs.onValue(function (chunk) {
             chunk.toString().should.equal(expect.shift());
+            count++;
+            if (count > 1) { return; }
             setImmediate(function () {
                 pt.write('o');
                 pt.write('o');
                 pt.end();
             });
         });
-        first.onEnd(done);
+        obs.onEnd(function () {
+            expect.length.should.equal(0);
+            done();
+        });
         
         pt.write('f');
+    });
+    it('should not leak event handlers', function (done) {
+        var pt = new stream.PassThrough({ objectMode: true }),
+            obs = fromNodeStream(pt);
+        
+        obs.take(1).onEnd(function () {
+            setImmediate(function () {
+                // stream comes with one listener to start with
+                pt.listeners('end').length.should.equal(1);
+                done();
+            });
+        });
+        
+        pt.write('f');
+        pt.write('o');
+        pt.write('o');
+        pt.end();
     });
 });

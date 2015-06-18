@@ -24,11 +24,11 @@ module.exports = function (stream) {
             emitter.end();
             return;
         }
-        var readable = true, writing = true;
+        var readable = true;
         
         function pump() {
-            var chunk;
-            while (readable && writing) {
+            var chunk, more = true;
+            while (readable && more) {
                 chunk = stream.read();
                 if (chunk === null) {
                     debug('Got null chunk, waiting for readable event');
@@ -36,7 +36,7 @@ module.exports = function (stream) {
                     break;
                 }
                 debug('Pump');
-                writing = emitter.emit(chunk);
+                more = emitter.emit(chunk);
             }
         }
         
@@ -52,7 +52,7 @@ module.exports = function (stream) {
         _onreadable = function () {
             debug('_onreadable called');
             readable = true;
-            if (writing) { pump(); }
+            pump();
         };
         _onerror = function (err) {
             debug('_onerror called: ', err.message);
@@ -74,7 +74,10 @@ module.exports = function (stream) {
         
         return function () {
             debug('Unsubscribed');
-            writing = false;
+            
+            stream.removeListener('readable', _onreadable);
+            stream.removeListener('error', _onerror);
+            stream.removeListener('end', _onend);
         };
     });
 };
