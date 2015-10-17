@@ -4,8 +4,7 @@
   "description": "Return a properly lazy Kefir stream given a Node streams2 stream",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -R spec test.js",
-    "cover": "istanbul cover -x test.js node_modules/.bin/_mocha -- -R spec test.js"
+    "test": "mocha -R spec test.js"
   },
   "repository": {
     "type": "git",
@@ -24,14 +23,11 @@
     "url": "https://github.com/myndzi/kefir-node-stream/issues"
   },
   "homepage": "https://github.com/myndzi/kefir-node-stream#readme",
-  "peerDependencies": {
-    "kefir": "^2.6.0"
-  },
   "devDependencies": {
-    "debug": "^2.2.0",
-    "istanbul": "^0.3.15",
-    "kefir": "^2.6.0",
     "mocha": "^2.2.5",
     "should": "^6.0.3"
+  },
+  "dependencies": {
+    "kefir": "^3.1.0"
   }
 }
