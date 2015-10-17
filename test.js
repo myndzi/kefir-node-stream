@@ -64,7 +64,7 @@ describe('fromNodeStream', function () {
         
         var buf = new Buffer('foo');
         obs.onValue(function (chunk) {
-            chunk.should.equal(buf);
+            chunk.toString().should.equal(buf.toString());
         });
         obs.onEnd(done);
         pt.end(buf);

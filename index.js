@@ -2,14 +2,9 @@
 
 var Kefir = require('kefir'),
     _stream = require('stream'),
-    debug;
 
 /* istanbul ignore next */
-try {
-    debug = require('debug')('kefir-node-stream');
-} catch (e) {
-    debug = function () { };
-}
+debug = function () { };
 
 module.exports = function (stream) {
     if (!stream || !(stream instanceof _stream.Stream) || !stream.hasOwnProperty('_readableState')) {
